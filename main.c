@@ -1,0 +1,57 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+
+int main() {
+    FILE* dosya;
+    char karakter, ilk_yazi[40];
+    int l = 0;
+
+    if ((dosya = fopen("C:/Users/bugra/OneDrive/Masaüstü/ornek.txt", "r+")) != NULL) {
+        karakter = fgetc(dosya);
+        while (karakter != EOF) {
+            printf("%c", karakter);
+            karakter = fgetc(dosya);
+        }
+
+        printf("\nekleme yapmak ister misin (1/0): ");
+        scanf("%d", &l);
+        getchar();
+
+        if (l == 1) {
+            printf("eklenecek metin: ");
+            fgets(ilk_yazi, sizeof(ilk_yazi), stdin);
+
+            if (ilk_yazi[strlen(ilk_yazi) - 1] == '\n') {
+                ilk_yazi[strlen(ilk_yazi) - 1] = '\0';
+            }
+
+            fwrite(ilk_yazi, sizeof(char), strlen(ilk_yazi) + 1, dosya);
+            fseek(dosya, 0, SEEK_SET);
+
+            karakter = fgetc(dosya);
+            while (karakter != EOF) {
+                printf("%c", karakter);
+                karakter = fgetc(dosya);
+            }
+        }
+        else {
+            printf("ekleme yapilmadi.\n");
+        }
+    }
+    else {
+        dosya = fopen("C:/Users/bugra/OneDrive/Masaüstü/ornek.txt", "w");
+        printf("ilk yaziyi gir: ");
+        fgets(ilk_yazi, sizeof(ilk_yazi), stdin);
+
+        if (ilk_yazi[strlen(ilk_yazi) - 1] == '\n') {
+            ilk_yazi[strlen(ilk_yazi) - 1] = '\0';
+        }
+
+        fprintf(dosya, "%s", ilk_yazi);
+    }
+
+    fclose(dosya);
+    return 0;
+}
